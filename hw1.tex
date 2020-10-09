@@ -1,0 +1,118 @@
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+\usepackage{graphicx} 
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\rhead{\footnotesize J. Klepl}
+
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{center}
+	{\Large \bf Homework 1 - Reset}
+	\vspace{2mm}
+	
+	{\bf Jiří Klepl}
+		
+\end{center}  
+
+\vspace{0.4cm}
+
+\begin{quote}
+Ukažte, jak lze libovolný jednopáskový Turingův stroj $M$ převést na Resetovací (jednopáskový) stroj $M'$, který se od Turingova stroje liší tím, že přechodová funkce neumožňuje pohyb doleva o jedno políčko, ale pouze pohyb na začátek (jednostranně nekonečné) pásky.
+\end{quote}
+
+\subsection*{Formální předpoklady}
+
+Předpokládáme, že Turingův stroj (dále jen TS) je upraven do formy s jednostrannou páskou, má množinu stavů $Q$, abecedu $\Gamma$ a přechodovou funkci $\delta : Q \times \Gamma \to Q \times \Gamma \times \{L, N, R\}$. TS $M'$ bude mít množinu stavů $Q'$, abecedu $\Gamma'$ a přechodovou funkci $\delta' : Q' \times \Gamma' \to Q' \times \Gamma' \times \{RESET, N, R\}$. \textit{Tedy jediný rozdíl v popisu stroje je nahrazení pohybu L (doleva) pohybem RESET}.
+
+\subsection*{Řešení}
+
+Nejprve uvedeme myšlenku a způsob modelování, až poté formálně definujeme rozšíření množiny stavů $Q$ na $Q'$ a abecedy $\Gamma$ na $\Gamma'$.
+
+\begin{itemize}
+    \item Pravidlo $x$ ve formě $\_ \times \_ \to \_ \times \_ \times R$ nebo $\_ \times \_ \to \_ \times \_ \times N$ budeme modelovat 1:1 (tedy v popisu $M'$ budou všechna tato pravidla v nezměněném znění).
+    \item Pro pravidla ve formě $x = (q, a) \to (p, b, L); q,a,p,b$ jsou proměnné
+    \begin{enumerate}
+        \item Obarvíme pole, z něhož chceme doleva, červeně a začneme počítat je-li počet neobarvených polí alespoň 2 (postupně budeme černě obarvovat pole, která nejsou naším cílem, tedy jsou moc nalevo): \\
+        $(q, a) \to (p_{0}, b_{red}, RESET)$; toto pravidlo definujeme pro každé pravidlo $x$ z popisu TS $M$, které zadávalo posun vlevo.
+        \item Počítáme, je-li počet nečerných polí do červeného (startovního) alespoň 2:\\
+        $(p_{0}, a) \to (p_{1}, a, RIGHT)$\\
+        $(p_{1}, a) \to (p_{2}, a, RIGHT)$\\
+        $(p_{2}, a) \to (p_{2}, a, RIGHT)$\\
+        všechna tato pravidla definujeme pro všechny kombinace $p \in Q$ a $a \in \Gamma$.
+        \item Teď jsme zpět na červeném (startovním) poli a nastanou dvě situace (buďto jsou mezi posledním černým polem (nebo startem pásky) a červeným alespoň dvě nečerná, či nikoliv, to poznáme podle stavů $p_1$ a $p_2$).
+        \begin{enumerate}
+            \item Opakujeme postup od kroku 1., ale tentokrát postupně začerňujeme (4.):\\
+            $(p_{2}, a_{red}) \to (p_{push}, a_{red}, RESET)$
+            \item Víme, že první neobarvené pole je první vlevo, tedy spustíme čistící proces končící v něm (nejprve odčerveníme startovní pole), pokračujeme krokem 5.:\\
+            $(p_{1}, a_{red}) \to (p_{clean}, a, RESET)$
+        \end{enumerate}
+        obě pravidla v tomto kroku definujeme pro všechny kombinace $p \in Q$ a $a \in \Gamma$.
+        \item Přeskočíme černě vyznačená pole, začerníme první nečerné a pokračujeme krokem 2.:\\
+        $(p_{push}, a_{black}) \to (p_{push}, a_{black}, RIGHT)$ \\
+        $(p_{push}, a) \to (p_{0}, a_{black}, RIGHT)$\\
+        tato pravidla opět definujeme pro všechny kombinace $p \in Q$ a $a \in \Gamma$.
+        \item Odčerníme všechna černě vyznačená pole a v prvním nečerném (cílov:\\
+        $(p_{clean}, a_{black}) \to (p_{clean}, a, RIGHT)$ \\
+        $(p_{clean}, a) \to (p, a, N)$\\
+        tato pravidla opět definujeme pro všechny kombinace $p \in Q$ a $a \in \Gamma$.
+    \end{enumerate}
+\end{itemize}
+
+\subsubsection*{Rozšíření množiny stavů a abecedy}
+
+Rozšíření množiny stavů: $Q' = \{q, q_0, q_1, q_2, q_{push}, q_{clean} | q \in Q\}$\\
+Rozšíření abecedy: $\Gamma' = \{a, a_{red}, a_{black} | a \in \Gamma\}$
+
+\subsection*{Výpočetní složitost pro jeden modelovaný příkaz TS $M$}
+
+Je-li $n$ index pozice na pásce, pak je výpočet proveden za pomoci $\Theta(n^2)$ příkazů TS $M'$.
+
+\subsection*{Korektnost}
+
+Tvrdíme, že postup modelování neselže pro žádnou platnou instrukci. Tedy můžeme triviálně předpokládat, že modelování s posunem doprava či neposouváním neselže, a zaměřit se pouze na \textbf{modelování posunu doleva}.
+
+\subsubsection*{Pozorování}
+
+\begin{enumerate}
+    \item Z předpokladů uvedených na začátku můžeme odvodit, že nalevo od startovního je alespoň jedno pole. Vyslovíme invariant, že pole přímo nalevo od startovního zůstane nečerné - tento lze triviálně ukázat.
+    
+    \item Každá z modelovacích instrukcí posouvá hlavu vpravo (a nikdy ne napravo od startovního pole) a nebo ji vrací na začátek. Tedy je-li počet RESETů konečný, pak i počet provedených kroků.
+    
+    \item RESET nastane pouze na startovním poli.
+    
+    \item Bloky kroků výpočtu mezi jednotlivými RESETy se liší počtem černých polí (po jejich odkrokování) postupně právě o 1.
+    
+    \item Před posledním resetem je před startovním polem právě jedno neobarvené pole.
+\end{enumerate}
+
+Z pozorování plyne konečnost algoritmu a jeho kvadratická složitost. Z posledního pozorování pak jeho korektnost.
+
+\subsection*{Optimalizace}
+
+Postup modelování posunu vlevo lze jednoduše optimalizovat na složitost $\theta(n \log n)$, $n$ opět index pozice, změníme-li postup na začerňování pomocí sudosti/lichosti polí, ignorujeme-li začerněná pole. Tedy začerňujeme ta pole, jež jsou ve stejné třídě $mod\ 2$ jako startovní pole (vždy v aktuálním indexování s nepočítanými začerněnými poli). Jinak postup podobný.
+
+\end{document}
