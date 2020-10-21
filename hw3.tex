@@ -1,0 +1,160 @@
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+\usepackage{graphicx} 
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\rhead{\footnotesize J. Klepl}
+
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{center}
+	{\Large \bf Homework 3 - prime}
+	\vspace{2mm}
+	
+	{\bf Jiří Klepl}
+		
+\end{center}  
+
+\vspace{0.4cm}
+
+
+\begin{quote}
+Popište algoritmus (pro Turingův stroj), který ignoruje svůj vstup a na výstup vypisuje postupně všechna prvočísla v rostoucím pořadí.
+\end{quote}
+
+\subsection*{Formální předpoklady}
+
+Ignorujeme vstup na pásce (popř. máme vstupní pásku a výstupní a tu vstupní neuvažujeme) a tedy pro tuto úlohu předpokládáme zjednodušení, že máme TS s pouze jednou páskou, která je ve vstupní konfiguraci prázdná.
+
+Dále předpokládáme, že výstup očekáváme binárně lsb a oddělen heši v sekvenčním pořadí.
+
+\subsection*{Řešení}
+
+Postupně bude na pásce čárkami oddělen konečný vzestupní seznam binárních zápisů prvočísel následován dvěma přirozenými čísly, toto také odděleno čárkami.
+
+Postup bude následující:
+
+\subsubsection*{Kopírovací subrutina}
+
+Očekává stroj ve stavu $mem \times copy \times init$ ukazující na první číslici kopírovaného slova. Zanechá stroj ve stavu $mem \times copy \times end$ ukazující na první číslici kopie.
+
+\begin{enumerate}
+    \item $(mem \times copy \times init, a) \to (mem \times copy, a \times red, N)$
+    \item $(mem \times copy, a \times red) \to (mem \times copy \times a \times shift, a, R)$
+    \item $(mem \times copy \times a \times shift, b) \to (mem \times copy \times a, b \times red, R)$
+    \item $(mem \times copy \times a \times shift, \#) \to (mem \times copy \times a, \#, R)$
+    \item $(mem \times copy \times a \times shift, \lambda) \to (mem \times copy \times a, \#, R)$
+    \item $(mem \times copy \times a, b) \to (mem \times copy \times a, b, R)$
+    \item $(mem \times copy \times a, \lambda) \to (mem \times copy \times L, a, L)$
+    \item $(mem \times copy \times L, a) \to (mem \times copy \times L, a, L)$
+    \item $(mem \times copy \times L, \#) \to (mem \times copy, \#, L)$
+    \item $(mem \times copy, a) \to (mem \times copy, a, L)$
+    \item $(mem \times copy, \#) \to (mem \times copy \times R, \#, R)$
+    \item $(mem \times copy, \lambda) \to (mem \times copy \times R, \lambda, R)$
+    \item $(mem \times copy \times R, \#) \to (mem \times copy \times end, \#, R)$
+    \item $(mem \times copy \times R, \lambda) \to (mem \times copy \times end, \lambda, R)$
+\end{enumerate}
+
+\subsubsection*{Inkrementovací subrutina}
+
+Očekává stroj ve stavu $mem \times inc \times init$ ukazující na první číslici inkrementovaného čísla. Zanechá stroj opět na první číslici ve stavu $mem \times inc \times end$.
+
+\begin{enumerate}
+    \item $(mem \times inc \times init, a) \to (mem \times inc, a, N)$
+    \item $(mem \times inc, 0) \to (mem \times inc \times L, 1, L)$
+    \item $(mem \times inc, \lambda) \to (mem \times inc \times L, 1, L)$
+    \item $(mem \times inc, 1) \to (mem \times inc, 0, R)$
+    \item $(mem \times inc \times L, a) \to (mem \times inc \times L, a, L)$
+    \item $(mem \times inc \times L, \lambda) \to (mem \times inc \times end, \lambda, R)$
+    \item $(mem \times inc \times L, \#) \to (mem \times inc \times end, \#, R)$
+\end{enumerate}
+
+\subsubsection*{Odečítací subrutina}
+
+\begin{enumerate}
+    \item $(mem \times sub \times init, a) \to (mem \times sub \times L, a \times red, L)$
+    \item $(mem \times sub \times L, a) \to (mem \times sub \times L, a, L)$
+    \item $(mem \times sub \times L, \#) \to (mem \times sub \times L, \#, L)$
+    \item $(mem \times sub \times L, a \times red) \to (mem \times sub \times a \times shift, a, R)$
+    \item $(mem \times sub \times a \times shift, b) \to (mem \times sub \times a, b \times red, R)$
+    \item $(mem \times sub \times a \times shift, \#) \to (mem \times sub \times a, \#, R)$
+    \item $(mem \times sub \times 0, 0 \times red), carry \not\in mem \to (mem \times sub \times L \times shift, 0, R)$
+    \item $(mem \times sub \times 0, 1 \times red), carry \not\in mem \to (mem \times sub \times L \times shift, 1, R)$
+    \item $(mem \times sub \times 1, 0 \times red), carry \not\in mem \to ((mem \cup \{carry\}) \times sub \times L \times shift, 1, R)$
+    \item $(mem \times sub \times 1, 1 \times red), carry \not\in mem \to (mem \times sub \times L \times shift, 0, R)$
+    \item $(mem \times sub \times 0, 0 \times red), carry \in mem \to (mem \times sub \times L \times shift, 1, R)$
+    \item $(mem \times sub \times 0, 1 \times red), carry \in mem \to ((mem \setminus \{carry\}) \times sub \times L \times shift, 0, R)$
+    \item $(mem \times sub \times 1, 0 \times red), carry \in mem \to (mem \times sub \times L \times shift, 0, R)$
+    \item $(mem \times sub \times 1, 1 \times red), carry \in mem \to (mem \times sub \times L \times shift, 1, R)$
+    \item $(mem \times sub \times L \times shift, a), \to (mem \times sub \times L, a \times red, L)$
+    \item $(mem \times sub \times L \times shift, \lambda), \to (mem \times sub \times L, \lambda, L)$
+    \item $(mem \times sub \times L, \lambda), carry \not\in mem \to (mem \times sub \times R, \lambda, R)$
+    \item $(mem \times sub \times R, a) \to (mem \times sub \times R, a, R)$
+    \item $(mem \times sub \times R, \#) \to (mem \times sub \times R, \#, R)$
+    \item $(mem \times sub \times R, a \times red) \to (mem \times sub \times end \times L, a, L)$
+    \item $(mem \times sub \times R, \lambda) \to (mem \times sub \times end \times L, \lambda, L)$
+    \item $(mem \times sub \times end \times L, a) \to (mem \times sub \times end \times L, a, L)$
+    \item $(mem \times sub \times end \times L, \#) \to (mem \times sub \times end, \#, R)$
+    \item $(mem \times sub \times end \times L, \lambda) \to (mem \times sub \times end, \lambda, R)$
+    \item $(mem \times sub \times L, \lambda), carry \in mem \to (mem \times sub \times 0, \lambda, R)$
+    \item $(mem \times sub \times 0, \lambda), carry \in mem \to (((mem \setminus \{carry\}) \cup \{bad\}) \times sub \times end \times L, \lambda, L)$
+    \item $(mem \times sub \times 1, \lambda) \to (((mem \setminus \{carry\}) \cup \{bad\}) \times sub \times end \times L, \lambda, L)$
+\end{enumerate}
+
+\subsubsection*{Dělící subrutina}
+
+Operandy definovány podobně jako u odečítání, v podobném duchu i volání a návrat.
+
+\begin{enumerate}
+    \item Označíme první číslice operandů modře (operandy rozlišujeme jako u odečítání vzájemnou polohou)
+    \item \label{div_sub} Pustíme odečtení levého operandu od pravého (nad abecedou, kde každý znak nahradíme modrou a nemodrou variantou)
+    \item pokud je v pameti bad, vycistime oznaceni operandu a vratime se na prvni cislici vysledku ve stavu $mem \times div \times end$
+    \item jinak, pokud je vysledek nenulovy, opakujeme krok \ref{div_sub}
+    \item pokud je vysledek nulovy, vycistime oznaceni operandu a vratime se na prvni cislici vysledku ve stavu $mem \times div \times end$.
+\end{enumerate}
+
+\subsubsection*{main rutina}
+
+Zde již nebudeme opakovat pomocné obarvování operandů a nebudeme ani uvádět stavy, úplně bychom se opakovali vpodstatě.
+
+\begin{enumerate}
+    \item Na pásku napíšeme 2.
+    \item \label{main_copy} označíme si první prvočíslo.
+    \item Okopírujeme poslední číslo.
+    \item \label{main_inc} Inkrementujeme aktuální poslední číslo.
+    \item \label{main_div} Okopírujeme aktuální poslední číslo.
+    \item Zkusíme poslední číslo vydělit označeným prvočíslem.
+    \begin{enumerate}
+        \item Pokud v paměti je bad, tak posuneme označení na další prvočíslo, smažeme aktuální poslední číslo, vyčistíme si paměť od zlého a
+        \begin{enumerate}
+            \item pokud označení je na aktuálním posledním čísle, vyčistíme označení a vrátíme se na krok \ref{main_copy}
+            \item jinak se vrátime na krok \ref{main_div}
+        \end{enumerate}
+        \item Jinak smažeme aktuální poslední číslo, označení posuneme na první prvočíslo a vrátíme se na krok \ref{main_inc}
+    \end{enumerate}
+\end{enumerate}
+
+\end{document}
