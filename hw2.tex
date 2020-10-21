@@ -1,0 +1,62 @@
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+\usepackage{graphicx} 
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\rhead{\footnotesize J. Klepl}
+
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{center}
+	{\Large \bf Homework 2 - $\exists\forall$}
+	\vspace{2mm}
+	
+	{\bf Jiří Klepl}
+		
+\end{center}  
+
+\vspace{0.4cm}
+
+
+\begin{quote}
+Ukažte, že jazyk L je rozhodnutelný, právě když existují rozhodnutelné jazyky A a B, pro které platí, že $L=\{x | (\exists y)[\left<x, y\right> \in A]\} = \{x | (\forall y)[\left<x,y\right> \in B]\}$
+\end{quote}
+
+\subsection*{''$\Rightarrow$``}
+
+Nastavíme $A := \left<L, \{\lambda\}\right>$ a $B := \left<L,\Sigma^\star\right>$.
+\footnote{(\forall X, Y \subseteq \Sigma^\star)[\label{foot} $\left< X, Y\right>$ je zkratka za $\{\left<\right.\} \cdot X \cdot \{,\} \cdot Y \cdot \{\left.\right>\}]$.}
+
+$L$ je rozhodnutelný, tedy i $A$, a $B$ díky uzavřenosti rozhodnutelných jazyků na řetězení.
+
+\subsection*{''$\Leftarrow$``}
+
+Nastavíme $A := \left<L, \{\lambda\}\right>$ a $B := \left<L,\Sigma^\star\right>$. \footnotemark[\ref{foot}]
+
+$A$ je rozhodnutelný, tedy i $L$, neboť problém jazyka $L$ je převoditelný na problém jazyka $A$ (konkrétně: $(\forall x \in L)[\left<\ \cdot\  x\ \cdot\ ,\lambda\right> \in A]$).
+
+
+\end{document}
