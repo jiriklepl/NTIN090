@@ -42,21 +42,25 @@
 
 
 \begin{quote}
-Ukažte, že jazyk L je rozhodnutelný, právě když existují rozhodnutelné jazyky A a B, pro které platí, že $L=\{x | (\exists y)[\left<x, y\right> \in A]\} = \{x | (\forall y)[\left<x,y\right> \in B]\}$
+Ukažte, že jazyk $L$ je rozhodnutelný, právě když existují rozhodnutelné jazyky $A$ a $B$, pro které platí, že $L=\{x | (\exists y)[\left<x, y\right> \in A]\} = \{x | (\forall y)[\left<x,y\right> \in B]\}$
 \end{quote}
 
 \subsection*{''$\Rightarrow$``}
 
 Nastavíme $A := \left<L, \{\lambda\}\right>$ a $B := \left<L,\Sigma^\star\right>$.
-\footnote{(\forall X, Y \subseteq \Sigma^\star)[\label{foot} $\left< X, Y\right>$ je zkratka za $\{\left<\right.\} \cdot X \cdot \{,\} \cdot Y \cdot \{\left.\right>\}]$.}
+\footnote{$(\forall X, Y \subseteq \Sigma^\star)[\label{foot} \left< X, Y\right>$ je zkratka za $\{\left<\right.\} \cdot X \cdot \{,\} \cdot Y \cdot \{\left.\right>\}]$.}
 
 $L$ je rozhodnutelný, tedy i $A$, a $B$ díky uzavřenosti rozhodnutelných jazyků na řetězení.
 
 \subsection*{''$\Leftarrow$``}
 
-Nastavíme $A := \left<L, \{\lambda\}\right>$ a $B := \left<L,\Sigma^\star\right>$. \footnotemark[\ref{foot}]
+Jazyky $A$ a $B$ jsou rozhodnutelné, tedy z uzavřenosti na průnik i $A \cap \left<\Sigma^\star, \Sigma^\star\right>$ a $B \cap \left<\Sigma^\star, \Sigma^\star\right>$ jsou regulární a dají nám stejnou definici $L$. Budeme tedy uvažovat tyto průniky jako původní $A$ a $B$.
 
-$A$ je rozhodnutelný, tedy i $L$, neboť problém jazyka $L$ je převoditelný na problém jazyka $A$ (konkrétně: $(\forall x \in L)[\left<\ \cdot\  x\ \cdot\ ,\lambda\right> \in A]$).
+Víme, že $A \subseteq \left<L,\Sigma^\star\right> \subseteq B$ a $L' = \{x | (\exists y)[\left<x, y\right> \in B']\} = \{x | (\forall y)[\left<x,y\right> \in A']\}$.
+
+Tedy $(\forall x \in L')[\left<x,\right> \in A' \wedge \left<x,\right> \not\in A]$ a $(\forall x \in L)[\left<x,\right> \in B \wedge \left<x,\right> \not\in B']$.
+
+Tedy problém jazyka $L$ je převoditelný na problém rozhodnutelného jazyka $B \setminus A'$ a tedy $L$ je rozhodnutelný. Mimochodem, to šlo vidět už v zadání.
 
 
 \end{document}
