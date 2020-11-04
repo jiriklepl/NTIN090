@@ -31,18 +31,18 @@
 \thispagestyle{empty} % This command disables the header on the first page. 
 
 \begin{center}
-	{\Large \bf Homework 3 - prime}
-	\vspace{2mm}
-	
-	{\bf Jiří Klepl}
-		
-\end{center}  
+    {\Large \bf Homework 3 - prime}
+    \vspace{2mm}
+
+    {\bf Jiří Klepl}
+
+\end{center}
 
 \vspace{0.4cm}
 
 
 \begin{quote}
-Popište algoritmus (pro Turingův stroj), který ignoruje svůj vstup a na výstup vypisuje postupně všechna prvočísla v rostoucím pořadí.
+    Popište algoritmus (pro Turingův stroj), který ignoruje svůj vstup a na výstup vypisuje postupně všechna prvočísla v rostoucím pořadí.
 \end{quote}
 
 \subsection*{Formální předpoklady}
@@ -147,14 +147,14 @@ Zde již nebudeme opakovat pomocné obarvování operandů a nebudeme ani uvád�
     \item \label{main_inc} Inkrementujeme aktuální poslední číslo.
     \item \label{main_div} Okopírujeme aktuální poslední číslo.
     \item Zkusíme poslední číslo vydělit označeným prvočíslem.
-    \begin{enumerate}
-        \item Pokud v paměti je bad, tak posuneme označení na další prvočíslo, smažeme aktuální poslední číslo, vyčistíme si paměť od zlého a
-        \begin{enumerate}
-            \item pokud označení je na aktuálním posledním čísle, vyčistíme označení a vrátíme se na krok \ref{main_copy}
-            \item jinak se vrátime na krok \ref{main_div}
-        \end{enumerate}
-        \item Jinak smažeme aktuální poslední číslo, označení posuneme na první prvočíslo a vrátíme se na krok \ref{main_inc}
-    \end{enumerate}
+          \begin{enumerate}
+              \item Pokud v paměti je bad, tak posuneme označení na další prvočíslo, smažeme aktuální poslední číslo, vyčistíme si paměť od zlého a
+                    \begin{enumerate}
+                        \item pokud označení je na aktuálním posledním čísle, vyčistíme označení a vrátíme se na krok \ref{main_copy}
+                        \item jinak se vrátime na krok \ref{main_div}
+                    \end{enumerate}
+              \item Jinak smažeme aktuální poslední číslo, označení posuneme na první prvočíslo a vrátíme se na krok \ref{main_inc}
+          \end{enumerate}
 \end{enumerate}
 
 \end{document}
