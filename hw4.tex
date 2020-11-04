@@ -1,0 +1,93 @@
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+\usepackage{graphicx} 
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\rhead{\footnotesize J. Klepl}
+
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{center}
+    {\Large \bf Homework 4 - reg}
+    \vspace{2mm}
+
+    {\bf Jiří Klepl}
+
+\end{center}
+
+\vspace{0.4cm}
+
+
+\begin{quote}
+    Nechť $B$ je jazyk přijímaný konečným automatem a nechť $A$ je jazyk pro nějž $A \leq_m B$. Je $A$ regulární? Proč?
+\end{quote}
+
+Vyvrátíme sporem.
+
+\subsection*{Předpoklady sporu}
+
+Mějme regulární jazyk $B = \mathbf{a}+$ nad abecedou $\Sigma^\star = \{a, b\}$, jazyk $A$ libovolný rozhodnutelný a $E$ jeho enumerátor, jehož výstup je lexikograficky uspořádán.
+
+\subsection*{Definice speciálního turingova stroje přijímajícího jazyk $A$}
+
+Definujme turingův stroj $M$ přijímající $A$ následovně:
+\begin{algorithm}
+    \caption{$M$ se slovem $y$ na pásce}
+    \begin{algorithmic}[1]
+        \State $E \gets \text{Enumerátor jazyka }  A$
+        \State $W \gets \mathbf{a}$
+        \While{$!E.empty()$}
+        \State $x \gets E.front()$
+        \State $E.pop()$
+        \If{$x < y$}
+        \State $W \gets W \cdot \mathbf{a}$
+        \ElsIf{$x == y$}
+        \State \Return{$\text{Přijmi vstup a na pásce zanech } W$}
+        \Else
+        \State \Return Odmítni vstup
+        \EndIf
+        \EndWhile
+    \end{algorithmic}
+\end{algorithm}
+
+Toto lze samozřejmě jednoduše za pomoci simulace emulátoru na jedné pásce za současného zaplňování druhé pásky symboly $a$ a následovaného odmazáváním prvního vyenumerovaného slova, pokud je lexikograficky menší než vstup. Pokud je toto slovo rovné vstupu, necháme na výstupu pouze obsah druhé pásky. Pokud je vyšší, odmítneme vstup.
+
+Tento postup je jistě konečný, neboť je jen konečně mnoho lexikograficky menších slov, než je vstup. Tedy turingův stroj $M$ vždy skončí.
+
+\subsection*{Převod}
+
+Poté definujeme $f$ pomocí turingova stroje $M$, poté: $B = f(A)$ a tedy $A \leq_m B$.
+
+\subsection*{Spor}
+
+$A \leq_m B$ a $B$ je regulární. Mějme tedy $A = \{\mathbf{a}^i\mathbf{b}^i | i \in \mathbb{N}\}$ porušující regulární pumping lemma a to nám dává spor.
+
+\end{document}

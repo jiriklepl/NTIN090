@@ -1,0 +1,60 @@
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\rhead{\footnotesize J. Klepl}
+
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{center}
+    {\Large \bf Homework 5 - size}
+    \vspace{2mm}
+
+    {\bf Jiří Klepl}
+
+\end{center}
+
+\vspace{0.4cm}
+
+
+\begin{quote}
+    Je jazyk $\text{Size} = \{\left<M,k\right> \mid \left\vert L(M) \right\vert \geq k\}$ rozhodnutelný? Je částečně rozhodnutelný?
+\end{quote}
+
+\subsection*{Částečná rozhodnutelnost}
+
+Pokud $L(M) \geq k$, pak určitě existuje slovo $m$, že: $\{x \mid x \in L(M): x \leq m\} = k$. Tedy stačí ověřit konečný počet slov, aby se potvrdilo, že $\left<M, k\right> \in \text{Size}$, neboť existuje pouze konečně mnoho slov lexikograficky menších $m$.
+
+Tedy existuje turingův stroj, který tato slova projde v konečném počtu kroků a rozhodne o přijetí. Jazyk je tedy (alespoň) \textbf{částečně rozhodnutelný}.
+
+\subsection*{Rozhodnutelnost}
+
+$m$-úplný jazyk $\textbf{NE}$ (not empty), který rozhoduje neprázdnost jazyků turingových strojů, lze $m$-převést na jazyk $\text{Size}$ (jednoduchým řetězením: $f(M) = \left<M , \mathbf{1} \right>$), tedy jazyk $\text{Size}$ jistě není \textbf{rozhodnutelný}.
+
+\end{document}
