@@ -1,0 +1,66 @@
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+\usepackage{float}
+
+\usepackage{fancyhdr}
+
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\rhead{\footnotesize J. Klepl}
+
+\cfoot{\footnotesize \thepage} 
+
+\begin{document}
+
+\begin{quote}
+    O kterých inkluzích mezi následujícími dvojicemi tříd jste schopni dokázat, že platí a o kterých, že neplatí. Za každý dokázaný vztah je jeden bod (do požadovaného počtu bodů započítáno za 3).
+
+    \begin{tabular}{l l l}
+        
+        1. & $TIME(2^n)$ & $NSPACE(\sqrt{n})$ \\
+        2. & $NSPACE((\log n)^3)$ & $SPACE(n)$ \\
+        3. & $NTIME(n^3)$ & $SPACE(n^6)$ \\
+    \end{tabular}
+\end{quote}
+
+\section*{Příklad 1}
+
+Uvažujme problém rozhodnutelný $M = (\Sigma, Q, q_0, \delta, F)$, nedeterministickým TS, v prostoru $NSPACE(\sqrt{n})$. Takový má $|\Sigma|^{\sqrt{n}} \cdot |Q| \cdot \sqrt{n}$ možných displayů, tuto množinu nazvěme $D$ a definujme přestupy mezi displayi $T$ podle $\delta$. Definujeme graf $G = (D, T)$.
+
+Potom úpravou $|\Sigma|^{\sqrt{n}} \cdot |Q| \cdot \sqrt{n} \in 2^{O(\sqrt{n})} \subseteq O(2^n)$ a tedy graf $G$ má $O(2^n)$ vrcholů. Hledáme tedy za pomoci deterministického turingova stroje existenci sledu mezi iniciálním displayem a nějakým koncovým (BÚNO právě jediným koncovým), což jistě v čase $TIME(2^n)$ stihneme.
+
+Nemožnost rozhodnout libovolný problém $Time(2^n)$ v prostoru $NSPACE(\sqrt{n})$ je zřejmá.
+
+Platí tedy:
+$$TIME(2^n) \supset NSPACE(\sqrt{n})$$
+
+\section*{Příklad 2}
+
+\section*{Příklad 3}
+
+Uvažujme problém rozhodnutelný $M = (\Sigma, Q, q_0, \delta, F)$, nedeterministickým TS, v čase $NTIME(n^3)$ (tedy i v prostoru $NSPACE(n^3)$). Tedy v hloubce $n^3$ alespoň jedna z větví výpočtu $M$ přijme, každá dobře definovaná nějakým indexem z $(|\Sigma| \cdot |Q| \cdot 3)^{n^3}$ (na základě jednotlivých rozhodnutí), což lze zapsat na vhodné abecedě $\Sigma'$ za pomoci $O(n^3)$ symbolů. Výpočet $M$ lze odsimulovat deterministickým turingovým strojem v prostoru $SPACE(n^3)$ za používání návodu na rozhodnutí použité větve iterovaném taktéž ve $SPACE(n^3)$.
+
+Mějme pak problém výpočtu $k^{n^6}$, což je problém řešitelný ve $SPACE(n^6)$, ale jistě ne v $NTIME(n^3)$, neboť $NSPACE(n^3)$ není dostačující a využití pásky je dolním odhadem časové složitosti.
+
+Platí tedy:
+$$NTIME(n^3) \subset SPACE(n^6)$$
+
+\end{document}
