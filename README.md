@@ -7,5 +7,6 @@ Homework assignment solutions:
 - [hw3.pdf](hw3.pdf)
 - [hw4.pdf](hw4.pdf)
 - [hw5.pdf](hw5.pdf)
+- [hw6.pdf](hw6.pdf)
 
 Do not copy, please.
